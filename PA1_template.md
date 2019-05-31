@@ -12,7 +12,8 @@ output:
 
 Data loaded into **activity** tibble using **tidyverse::read_csv()** 
 
-```{r load, echo=TRUE, message=FALSE}
+
+```r
 library(tidyverse)
 activity <- read_csv("activity.zip")
 ```
@@ -21,7 +22,8 @@ activity <- read_csv("activity.zip")
 
 ### Histogram of total number of steps taken per day
 
-```{r stepshist, echo=TRUE}
+
+```r
 activity %>% drop_na(steps) %>%
       group_by(date) %>% 
       summarise(daily_steps = sum(steps, na.rm = T)) %>% 
@@ -35,9 +37,12 @@ activity %>% drop_na(steps) %>%
       theme_minimal()
 ```
 
+![](PA1_template_files/figure-html/stepshist-1.png)<!-- -->
+
 ### Mean and median of total number of steps taken per day
 
-```{r stepsmed, echo=TRUE}
+
+```r
 daily_steps <- activity %>% drop_na(steps) %>%
       group_by(date) %>% 
       summarise(steps = sum(steps, na.rm = T))
@@ -46,7 +51,7 @@ daily_steps_mean <- mean(daily_steps$steps)
 daily_steps_median <- median(daily_steps$steps)
 ```
 
-The mean of total number of steps taken per day is **`r round(daily_steps_mean, 2)`** and the median is **`r round(daily_steps_median, 2)`**.
+The mean of total number of steps taken per day is **10766.19** and the median is **10765**.
 
 
 ## What is the average daily activity pattern?
