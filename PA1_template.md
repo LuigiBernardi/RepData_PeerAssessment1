@@ -55,7 +55,7 @@ The mean of total number of steps taken per day is **10766.19** and the median i
 
 ## What is the average daily activity pattern?
 
-### Time series plot of average steps across intervals
+### Time series plot of steps taken in each 5-minute interval, averaged across all days
 
 
 ```r
@@ -83,7 +83,7 @@ interval_max_steps <- activity %>% drop_na(steps) %>%
       filter(interval_mean_steps == max(interval_mean_steps))
 ```
 
-5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps is number **835**.
+5-minute interval that contains the maximum number of average steps is **835**.
 
 ## Imputing missing values
 
@@ -97,9 +97,9 @@ activity_NA <- activity %>%
 
 Total number of missig values in dataset is **2304**.
 
-### New dataset withou missing values
+### Creation of a new dataset with no missing values
 
-Missing values for a specific interval were filled using the average number of steps for that interval computed on the same interval for days with valid data.
+Missing values for a specific interval were filled using the average number of steps for that interval computed on days with valid data.
 
 
 ```r
@@ -141,21 +141,26 @@ daily_steps_mean_nomissing <- mean(daily_steps_nomissing$steps)
 daily_steps_median_nomissing <- median(daily_steps_nomissing$steps)
 ```
 
-The mean of total number of steps taken per day is **10766.19** and the median is **10766.19**.  
-The mean computed on dataset without missing values doesn't differ from the mean computed on data with missing values. This is a consequence of my imputation method.  
+Considering data with no missing values, the average number of steps taken per day is **10766.19** and the median is **10766.19**.  
+The mean computed on dataset without missing values doesn't differ from the mean computed on data with missing values. This is a consequence of the imputation method I've chosen.  
 Median of daily steps distribution without missing values differs slightly from the one computed on data with missing values.  
 Mean and median are the same because, imputing missing values with interval averages, I've introduced several days with total number of steps equal to the mean and so the distribution is equally splitted by its mean value.  
-Imputing missing value with interval averages, we observe a daily steps distribution with a peak in histogram's bin containing daily steps average value.
+After filling missing value with interval averages, we observe a daily steps distribution with a peak in histogram's bin containing daily steps average value.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-### Day type variable
+### Creation of day_type variable
 
 
 ```r
 activity_nomissing <- activity_nomissing %>% 
       mutate(day = weekdays(date),
-             day_type = factor(ifelse(day %in% c("sabato", "domenica"), "weekend", "weekday"))) # italian locale
+             day_type = factor(ifelse(day %in% c("sabato", "domenica"), "weekend", "weekday")))
+# NB line codes work for locale with italian language
+# If your locale is in english and you want to run the code, uncomment and run following lines:
+# activity_nomissing <- activity_nomissing %>% 
+#       mutate(day = weekdays(date),
+#              day_type = factor(ifelse(day %in% c("saturday", "sunday"), "weekend", "weekday")))
 ```
 
 ### Panel plot of weekdays vs weekends

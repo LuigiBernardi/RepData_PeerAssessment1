@@ -232,8 +232,8 @@ daily_steps_median &lt;- median(daily_steps$steps)</code></pre>
 </div>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
-<div id="time-series-plot-of-average-steps-across-intervals" class="section level3">
-<h3>Time series plot of average steps across intervals</h3>
+<div id="time-series-plot-of-steps-taken-in-each-5-minute-interval-averaged-across-all-days" class="section level3">
+<h3>Time series plot of steps taken in each 5-minute interval, averaged across all days</h3>
 <pre class="r"><code>activity %&gt;% drop_na(steps) %&gt;%
       group_by(interval) %&gt;%
       summarise(interval_mean_steps = mean(steps, na.rm = T)) %&gt;% 
@@ -252,7 +252,7 @@ daily_steps_median &lt;- median(daily_steps$steps)</code></pre>
       group_by(interval) %&gt;%
       summarise(interval_mean_steps = mean(steps, na.rm = T)) %&gt;% 
       filter(interval_mean_steps == max(interval_mean_steps))</code></pre>
-<p>5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps is number <strong>835</strong>.</p>
+<p>5-minute interval that contains the maximum number of average steps is <strong>835</strong>.</p>
 </div>
 </div>
 <div id="imputing-missing-values" class="section level2">
@@ -263,9 +263,9 @@ daily_steps_median &lt;- median(daily_steps$steps)</code></pre>
       summarise(total_missing = sum(is.na(steps)))</code></pre>
 <p>Total number of missig values in dataset is <strong>2304</strong>.</p>
 </div>
-<div id="new-dataset-withou-missing-values" class="section level3">
-<h3>New dataset withou missing values</h3>
-<p>Missing values for a specific interval were filled using the average number of steps for that interval computed on the same interval for days with valid data.</p>
+<div id="creation-of-a-new-dataset-with-no-missing-values" class="section level3">
+<h3>Creation of a new dataset with no missing values</h3>
+<p>Missing values for a specific interval were filled using the average number of steps for that interval computed on days with valid data.</p>
 <pre class="r"><code># dataset with average numerber of steps for each interval
 interval_steps &lt;- activity %&gt;% drop_na(steps) %&gt;%
       group_by(interval) %&gt;%
@@ -295,20 +295,25 @@ activity_nomissing &lt;- activity %&gt;%
       summarise(steps = sum(steps, na.rm = T))
 daily_steps_mean_nomissing &lt;- mean(daily_steps_nomissing$steps)
 daily_steps_median_nomissing &lt;- median(daily_steps_nomissing$steps)</code></pre>
-<p>The mean of total number of steps taken per day is <strong>10766.19</strong> and the median is <strong>10766.19</strong>.<br />
-The mean computed on dataset without missing values doesn’t differ from the mean computed on data with missing values. This is a consequence of my imputation method.<br />
+<p>Considering data with no missing values, the average number of steps taken per day is <strong>10766.19</strong> and the median is <strong>10766.19</strong>.<br />
+The mean computed on dataset without missing values doesn’t differ from the mean computed on data with missing values. This is a consequence of the imputation method I’ve chosen.<br />
 Median of daily steps distribution without missing values differs slightly from the one computed on data with missing values.<br />
 Mean and median are the same because, imputing missing values with interval averages, I’ve introduced several days with total number of steps equal to the mean and so the distribution is equally splitted by its mean value.<br />
-Imputing missing value with interval averages, we observe a daily steps distribution with a peak in histogram’s bin containing daily steps average value.</p>
+After filling missing value with interval averages, we observe a daily steps distribution with a peak in histogram’s bin containing daily steps average value.</p>
 </div>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
-<div id="day-type-variable" class="section level3">
-<h3>Day type variable</h3>
+<div id="creation-of-day_type-variable" class="section level3">
+<h3>Creation of day_type variable</h3>
 <pre class="r"><code>activity_nomissing &lt;- activity_nomissing %&gt;% 
       mutate(day = weekdays(date),
-             day_type = factor(ifelse(day %in% c(&quot;sabato&quot;, &quot;domenica&quot;), &quot;weekend&quot;, &quot;weekday&quot;))) # italian locale</code></pre>
+             day_type = factor(ifelse(day %in% c(&quot;sabato&quot;, &quot;domenica&quot;), &quot;weekend&quot;, &quot;weekday&quot;)))
+# NB line codes work for locale with italian language
+# If your locale is in english and you want to run the code, uncomment and run following lines:
+# activity_nomissing &lt;- activity_nomissing %&gt;% 
+#       mutate(day = weekdays(date),
+#              day_type = factor(ifelse(day %in% c(&quot;saturday&quot;, &quot;sunday&quot;), &quot;weekend&quot;, &quot;weekday&quot;)))</code></pre>
 </div>
 <div id="panel-plot-of-weekdays-vs-weekends" class="section level3">
 <h3>Panel plot of weekdays vs weekends</h3>
