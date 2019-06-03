@@ -48,9 +48,33 @@ daily_steps_median <- median(daily_steps$steps)
 
 The mean of total number of steps taken per day is **`r round(daily_steps_mean, 2)`** and the median is **`r round(daily_steps_median, 2)`**.
 
-
 ## What is the average daily activity pattern?
 
+### Time series plot of average steps across intervals
+
+```{r dailypattern, echo=TRUE}
+activity %>% drop_na(steps) %>%
+      group_by(interval) %>%
+      summarise(interval_mean_steps = mean(steps, na.rm = T)) %>% 
+      ggplot(aes(x = interval, y = interval_mean_steps)) +
+      geom_line(colour = "steelblue") +
+      scale_x_continuous(breaks = seq(0, 2300, by = 200)) +
+      labs(title = "Average steps for each interval",
+           x = "Interval",
+           y = "Average steps") +
+      theme_minimal()
+```
+
+### Interval with highest average number of steps
+
+```{r maxavgsteps, echo=TRUE}
+interval_max_steps <- activity %>% drop_na(steps) %>%
+      group_by(interval) %>%
+      summarise(interval_mean_steps = mean(steps, na.rm = T)) %>% 
+      filter(interval_mean_steps == max(interval_mean_steps))
+```
+
+5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps is number **`r interval_max_steps$interval`**.
 
 
 ## Imputing missing values
